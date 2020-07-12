@@ -1,0 +1,16 @@
+---
+- name: Cleanup user for k3s
+  include_tasks: cleanup-user.yml
+  when: 
+    - k8s_node is defined
+    - serveNet_ip is defined
+    - kubernetes_engine != "k3s"
+  tags: [ never, cleanup ]
+
+- name: Generate user for k3s
+  include_tasks: create-user.yml
+  when: 
+    - k8s_node is defined
+    - serveNet_ip is defined
+    - kubernetes_engine == "k3s"
+  tags: [ nocleanup ]
